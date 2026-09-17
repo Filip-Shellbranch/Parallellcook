@@ -68,19 +68,24 @@ double calculateTrapeze(double x1, double x2)
 void *thread_func(void *args)
 {
     info_t thread_info = *((info_t *)args);
-    int traps_per_thread = thread_info.trap_count / thread_info.t_count;
+    int t_id = thread_info.t_id;
+    int t_count = thread_info.t_count;
+    int total_traps = thread_info.trap_count;
     double dx = thread_info.dx;
-    double start = INTERVAL_MIN + (thread_info.t_id) * (traps_per_thread * dx);
+
+    int traps_per_thread = total_traps / t_count;
+
+    int start_trap = t_id * traps_per_thread;
+    // Takes all the rest of the trapezes if this is the last thread,
+    // to solve issues when number of trapezes are not divisible by thread count.
+    int end_trap = (t_id == t_count - 1) ? total_traps : start_trap + traps_per_thread;
 
     double sum_local = 0;
-    for (int i = start; i < traps_per_thread; i++)
+    for (int i = start_trap; i < end_trap; i++)
     {
-        double x1 = start + i * dx;
+        double x1 = INTERVAL_MIN + i * dx;
         double x2 = x1 + dx;
-        if (x2 > INTERVAL_MAX)
-        {
-            break;
-        }
+
         double area = calculateTrapeze(x1, x2);
         sum_local += area;
     }
