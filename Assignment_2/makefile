@@ -11,3 +11,7 @@ clean:
 
 e1: 
 	g++ Exercise_1/numerical_integration_fast.cpp -o ${buildFolder}/${e1Name}
+
+e2:
+	g++ Exercise_2/sieve.cpp -o ${buildFolder}/${e2Name}
+	./build/e2.out
