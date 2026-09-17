@@ -10,5 +10,4 @@ clean:
 	find ${buildFolder}/ -mindepth 1 -delete
 
 e1: 
-	g++ Exercise_1/numerical_integration.cpp -o ${buildFolder}/${e1Name}
-	./${buildFolder}/${e1Name}
+	g++ Exercise_1/numerical_integration_fast.cpp -o ${buildFolder}/${e1Name}
