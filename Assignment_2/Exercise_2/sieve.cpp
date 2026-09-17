@@ -5,7 +5,7 @@
 #include <bits/chrono.h>
 #include <vector>
 
-#define THREAD_COUNT 12
+#define THREAD_COUNT 10
 #define MAX 100000000
 
 typedef std::vector<uint8_t> marks_t;
@@ -127,6 +127,8 @@ int main(int argc, char *argv[])
         }
     }
     std::cout << "Primes found: " << count << "\n";
+    std::cout << "Thread count: " << THREAD_COUNT << "\n";
+    std::cout << "Max: " << MAX << "\n";
 
     // Calculate duration in milliseconds
     std::chrono::duration<double, std::milli> duration = end - start;
