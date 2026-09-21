@@ -33,14 +33,14 @@ struct node
 {
     T value;
     node<T> *next = nullptr;
-    TATAS_Lock lock;
+    MCS_Lock lock;
 };
 
 template <typename T>
 class sorted_list
 {
     node<T> *first = nullptr;
-    TATAS_Lock first_lock;
+    MCS_Lock first_lock;
 
 public:
     /* default implementations:
