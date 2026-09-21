@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
         {
             l1.insert(uniform_dist(engine));
         }
-        benchmark(threadcnt, u8"non-thread-safe read", [&l1](int random)
+        benchmark(threadcnt, u8"Fine-Mutex read", [&l1](int random)
                   { read(l1, random); });
-        benchmark(threadcnt, u8"non-thread-safe update", [&l1](int random)
+        benchmark(threadcnt, u8"Fine-Mutex update", [&l1](int random)
                   { update(l1, random); });
     }
     {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         {
             l1.insert(uniform_dist(engine));
         }
-        benchmark(threadcnt, u8"non-thread-safe mixed", [&l1](int random)
+        benchmark(threadcnt, u8"Fine-Mutex mixed", [&l1](int random)
                   { mixed(l1, random); });
     }
     return EXIT_SUCCESS;

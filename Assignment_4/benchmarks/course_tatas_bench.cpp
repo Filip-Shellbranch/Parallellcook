@@ -5,7 +5,7 @@
 #include <string>
 
 #include "../benchmark.hpp"
-#include "../list_implementations/course_mutex.hpp"
+#include "../list_implementations/course_tatas.hpp"
 
 static const int DATA_VALUE_RANGE_MIN = 0;
 static const int DATA_VALUE_RANGE_MAX = 256;
@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
         {
             l1.insert(uniform_dist(engine));
         }
-        benchmark(threadcnt, u8"Course Mutex read", [&l1](int random)
+        benchmark(threadcnt, u8"Course TATAS read", [&l1](int random)
                   { read(l1, random); });
-        benchmark(threadcnt, u8"Course Mutex update", [&l1](int random)
+        benchmark(threadcnt, u8"Course TATAS update", [&l1](int random)
                   { update(l1, random); });
     }
     {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         {
             l1.insert(uniform_dist(engine));
         }
-        benchmark(threadcnt, u8"Course Mutex mixed", [&l1](int random)
+        benchmark(threadcnt, u8"Course TATAS mixed", [&l1](int random)
                   { mixed(l1, random); });
     }
     return EXIT_SUCCESS;
