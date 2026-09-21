@@ -101,6 +101,7 @@ public:
     /* count elements with value v in the list */
     std::size_t count(T v)
     {
+        lock.lock();
         std::size_t cnt = 0;
         /* first go to value v */
         node<T> *current = first;
@@ -114,6 +115,7 @@ public:
             cnt++;
             current = current->next;
         }
+        lock.unlock();
         return cnt;
     }
 };

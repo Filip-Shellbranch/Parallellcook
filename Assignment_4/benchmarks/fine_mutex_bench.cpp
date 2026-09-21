@@ -5,7 +5,7 @@
 #include <string>
 
 #include "../benchmark.hpp"
-#include "../list_implementations/course_mutex.hpp"
+#include "../list_implementations/fine_mutex.hpp"
 
 static const int DATA_VALUE_RANGE_MIN = 0;
 static const int DATA_VALUE_RANGE_MAX = 256;
