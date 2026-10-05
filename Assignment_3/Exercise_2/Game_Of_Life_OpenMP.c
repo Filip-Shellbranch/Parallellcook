@@ -11,6 +11,8 @@
   sudo apt-get install ffmpeg)
  WARNING: Do not print output for large array sizes!
 		  or multiple time steps!
+
+ Parallelised by Filip Hellgren, David Olmedo
  ******************************************************/
 
 #include <stdio.h>
@@ -135,11 +137,11 @@ int main(int argc, char *argv[])
 		previous = swap;
 	}
 	gettimeofday(&tf, NULL);
-	time = (tf.tv_sec - ts.tv_sec) + (tf.tv_usec - ts.tv_usec) * 0.000001;
+	time = (tf.tv_sec - ts.tv_sec) + (tf.tv_usec - ts.tv_usec) * 0.000001 * 1000;
 
 	free_array(current, N);
 	free_array(previous, N);
-	printf("GameOfLife: Thread Count %d Size %d Steps %d Time %lf s\n", T_COUNT, N, T, time);
+	printf("GameOfLife: Thread Count %d Size %d Steps %d Time %lf ms\n", T_COUNT, N, T, time);
 #ifdef OUTPUT
 	system(FINALIZE);
 #endif
