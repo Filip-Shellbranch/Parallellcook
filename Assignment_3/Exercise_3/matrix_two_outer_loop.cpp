@@ -29,12 +29,6 @@ void print_matrix(const std::vector<std::vector<int>> &matrix, const char *name)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
-    {
-        std::cout << "Usage: ./exec <ThreadCount>\n";
-        return 0;
-    }
-    int thr_count = atoi(argv[1]);
     std::vector<std::vector<int>> a(DIM, std::vector<int>(DIM));
     std::vector<std::vector<int>> b(DIM, std::vector<int>(DIM));
     std::vector<std::vector<int>> c(DIM, std::vector<int>(DIM));
@@ -49,7 +43,7 @@ int main(int argc, char *argv[])
     }
 
     auto start = std::chrono::steady_clock::now();
-#pragma omp parallel default(private) shared(a, b, c) num_threads(thr_count)
+#pragma omp parallel default(private) shared(a, b, c)
 #pragma omp for schedule(static) collapse(2)
     for (int i = 0; i < DIM; i++)
     {
@@ -70,6 +64,7 @@ int main(int argc, char *argv[])
     // print_matrix(c, "C");
     //  Calculate duration in milliseconds
     std::chrono::duration<double, std::milli> duration = end - start;
+    std::cout << "Thread count: " << omp_get_max_threads() << " Matrix size: " << DIM << "x" << DIM << "\n";
     std::cout << "Elapsed time: " << duration.count() << " ms\n";
 
     return 0;
