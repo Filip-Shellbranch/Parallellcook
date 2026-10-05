@@ -4,6 +4,8 @@
 #include <omp.h>
 #include <vector>
 
+// Written by Filip Hellgren, David Olmedo
+
 #define DIM 512
 
 void print_matrix(const std::vector<std::vector<int>> &matrix, const char *name)
