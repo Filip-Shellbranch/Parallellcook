@@ -4,7 +4,7 @@
  ************* Conway's game of life ******************
  ******************************************************
 
- Usage: ./exec ArraySize TimeSteps
+ Usage: ./exec ThreadCount ArraySize TimeSteps
 
  Compile with -DOUTPUT to print output in output.gif
  (You will need FFmpeg for that; install it with
@@ -137,11 +137,11 @@ int main(int argc, char *argv[])
 		previous = swap;
 	}
 	gettimeofday(&tf, NULL);
-	time = (tf.tv_sec - ts.tv_sec) + (tf.tv_usec - ts.tv_usec) * 0.000001 * 1000;
+	time = (tf.tv_sec - ts.tv_sec) + (tf.tv_usec - ts.tv_usec) * 0.000001;
 
 	free_array(current, N);
 	free_array(previous, N);
-	printf("GameOfLife: Thread Count %d Size %d Steps %d Time %lf ms\n", T_COUNT, N, T, time);
+	printf("GameOfLife: Thread Count %d Size %d Steps %d Time %lf s\n", T_COUNT, N, T, time);
 #ifdef OUTPUT
 	system(FINALIZE);
 #endif
