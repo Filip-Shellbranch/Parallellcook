@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
         {
             a[i][j] = i + j;
             b[i][j] = i + j;
+            c[i][j] = 0;
         }
     }
 
@@ -51,7 +52,6 @@ int main(int argc, char *argv[])
     {
         for (int j = 0; j < DIM; j++)
         {
-            c[i][j] = 0;
             for (int k = 0; k < DIM; k++)
             {
                 c[i][j] += a[i][k] * b[k][j];
