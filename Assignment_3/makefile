@@ -16,3 +16,6 @@ e3_outer:
 e3_two_outer: 
 	g++ -fopenmp Exercise_3/matrix_two_outer_loop.cpp -o a.out
 	OMP_NUM_THREADS=${THREADS} ./a.out
+
+e4:
+	g++ -fopenmp Exercise_4/substitution.cpp -o a.out
