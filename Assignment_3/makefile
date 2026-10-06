@@ -19,3 +19,4 @@ e3_two_outer:
 
 e4:
 	g++ -fopenmp Exercise_4/substitution.cpp -o a.out
+	OMP_NUM_THREADS=${THREADS} ./a.out

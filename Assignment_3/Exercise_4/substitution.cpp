@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <iostream>
 
-#define VARS 3 // Ska testa med 42.000 vars 🤯🦧
+#define VARS 10000 // Ska testa med 42.000 vars 🤯🦧
 
 typedef struct tri_system
 {
@@ -64,24 +64,27 @@ void print_result(system_t result)
 system_t generate_system()
 {
     system_t sys;
-    std::vector<std::vector<double>> A(VARS, std::vector<double>(VARS));
-    std::vector<double> b(VARS);
-    std::vector<double> x(VARS);
 
+    sys.A.resize(VARS, std::vector<double>(VARS));
+    sys.b.resize(VARS);
+    sys.x.resize(VARS);
+
+#pragma omp parallel for num_threads(12)
     for (size_t row = 0; row < VARS; row++)
     {
-        x[row] = 0;
-        b[row] = row;
+        sys.x[row] = 0;
+        sys.b[row] = row;
+    }
+
+#pragma omp parallel for collapse(2) num_threads(12)
+    for (size_t row = 0; row < VARS; row++)
+    {
         for (size_t col = 0; col < VARS; col++)
         {
             int val = (col >= row) ? row + col + 1 : 0;
-            A[row][col] = val;
+            sys.A[row][col] = val;
         }
     }
-
-    sys.A = A;
-    sys.b = b;
-    sys.x = x;
 
     return sys;
 }
@@ -104,12 +107,17 @@ void row_subs()
 
 void column_subs()
 {
+    auto starty = std::chrono::steady_clock::now();
     system_t sys = generate_system();
+    auto endy = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> durationy = endy - starty;
+    std::cout << "Elapsed time generating system: " << durationy.count() << " ms\n";
     std::vector<std::vector<double>> &A = sys.A;
     std::vector<double> &b = sys.b;
     std::vector<double> &x = sys.x;
 
-    print_system(sys);
+    // print_system(sys);
+    auto start = std::chrono::steady_clock::now();
     for (int row = 0; row < VARS; row++)
     {
         x[row] = b[row];
@@ -117,20 +125,22 @@ void column_subs()
     for (int col = VARS - 1; col >= 0; col--)
     {
         x[col] /= A[col][col];
+#pragma omp parallel for shared(x, A, col)
         for (int row = 0; row < col; row++)
             x[row] -= A[row][col] * x[col];
     }
-    print_result(sys);
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "Column substitution:\n";
+    std::chrono::duration<double, std::milli> duration = end - start;
+    std::cout << "Thread count: " << omp_get_max_threads() << " System size: " << VARS << "\n";
+    std::cout << "Elapsed time: " << duration.count() << " ms\n";
+    // print_result(sys);
 }
 
 int main(int argc, char *argv[])
 {
     // std::cout << "Row substitution:\n";
-    auto start = std::chrono::steady_clock::now();
     row_subs();
-    auto end = std::chrono::steady_clock::now();
-    // std::cout << "Row substitution time (ms): << start - end\n";
-
     column_subs();
 
     return 0;
