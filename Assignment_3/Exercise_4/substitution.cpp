@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <iostream>
 
-#define VARS 10000 // Ska testa med 42.000 vars 🤯🦧
+#define VARS 15000 // Ska testa med 42.000 vars 🤯🦧
 
 typedef struct tri_system
 {
@@ -61,6 +61,11 @@ void print_result(system_t result)
     }
 }
 
+void set_schedule(omp_sched_t schedule, int chunk_size)
+{
+    omp_set_schedule(schedule, chunk_size);
+}
+
 system_t generate_system()
 {
     system_t sys;
@@ -105,18 +110,14 @@ void row_subs()
     }
 }
 
-void column_subs()
+void column_subs(const char *schedule_name)
 {
-    auto starty = std::chrono::steady_clock::now();
     system_t sys = generate_system();
-    auto endy = std::chrono::steady_clock::now();
-    std::chrono::duration<double, std::milli> durationy = endy - starty;
-    std::cout << "Elapsed time generating system: " << durationy.count() << " ms\n";
+    std::cout << "System generated\n";
     std::vector<std::vector<double>> &A = sys.A;
     std::vector<double> &b = sys.b;
     std::vector<double> &x = sys.x;
 
-    // print_system(sys);
     auto start = std::chrono::steady_clock::now();
     for (int row = 0; row < VARS; row++)
     {
@@ -125,23 +126,49 @@ void column_subs()
     for (int col = VARS - 1; col >= 0; col--)
     {
         x[col] /= A[col][col];
-#pragma omp parallel for shared(x, A, col)
+#pragma omp parallel for shared(x, A, col) schedule(runtime)
         for (int row = 0; row < col; row++)
             x[row] -= A[row][col] * x[col];
     }
     auto end = std::chrono::steady_clock::now();
-    std::cout << "Column substitution:\n";
+    std::cout << "Column substitution " << schedule_name << ":\n";
     std::chrono::duration<double, std::milli> duration = end - start;
     std::cout << "Thread count: " << omp_get_max_threads() << " System size: " << VARS << "\n";
-    std::cout << "Elapsed time: " << duration.count() << " ms\n";
-    // print_result(sys);
+    std::cout << "Elapsed time: " << duration.count() << " ms\n\n";
+}
+
+void column_subs_static()
+{
+    set_schedule(omp_sched_static, 0);
+    column_subs("static");
+}
+
+void column_subs_dynamic()
+{
+    set_schedule(omp_sched_dynamic, 0);
+    column_subs("dynamic");
+}
+
+void column_subs_guided()
+{
+    set_schedule(omp_sched_guided, 0);
+    column_subs("guided");
+}
+
+void column_subs_auto()
+{
+    set_schedule(omp_sched_auto, 0);
+    column_subs("auto");
 }
 
 int main(int argc, char *argv[])
 {
-    // std::cout << "Row substitution:\n";
     row_subs();
-    column_subs();
+
+    column_subs_static();
+    column_subs_dynamic();
+    column_subs_guided();
+    column_subs_auto();
 
     return 0;
 }
