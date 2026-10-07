@@ -123,27 +123,27 @@ void row_subs(const char *schedule_name)
     std::cout << "Elapsed time: " << duration.count() << " ms\n\n";
 }
 
-void row_subs_static()
+void row_subs_static(int chunk_size)
 {
-    set_schedule(omp_sched_static, 0);
+    set_schedule(omp_sched_static, chunk_size);
     row_subs("static");
 }
 
-void row_subs_dynamic()
+void row_subs_dynamic(int chunk_size)
 {
-    set_schedule(omp_sched_dynamic, 0);
+    set_schedule(omp_sched_dynamic, chunk_size);
     row_subs("dynamic");
 }
 
-void row_subs_guided()
+void row_subs_guided(int chunk_size)
 {
-    set_schedule(omp_sched_guided, 0);
+    set_schedule(omp_sched_guided, chunk_size);
     row_subs("guided");
 }
 
-void row_subs_auto()
+void row_subs_auto(int chunk_size)
 {
-    set_schedule(omp_sched_auto, 0);
+    set_schedule(omp_sched_auto, chunk_size);
     row_subs("auto");
 }
 
@@ -174,42 +174,53 @@ void column_subs(const char *schedule_name)
     std::cout << "Elapsed time: " << duration.count() << " ms\n\n";
 }
 
-void column_subs_static()
+void column_subs_static(int chunk_size)
 {
-    set_schedule(omp_sched_static, 0);
+    set_schedule(omp_sched_static, chunk_size);
     column_subs("static");
 }
 
-void column_subs_dynamic()
+void column_subs_dynamic(int chunk_size)
 {
-    set_schedule(omp_sched_dynamic, 0);
+    set_schedule(omp_sched_dynamic, chunk_size);
     column_subs("dynamic");
 }
 
-void column_subs_guided()
+void column_subs_guided(int chunk_size)
 {
-    set_schedule(omp_sched_guided, 0);
+    set_schedule(omp_sched_guided, chunk_size);
     column_subs("guided");
 }
 
-void column_subs_auto()
+void column_subs_auto(int chunk_size)
 {
-    set_schedule(omp_sched_auto, 0);
+    set_schedule(omp_sched_auto, chunk_size);
     column_subs("auto");
+}
+
+void run_columns(int chunk_size)
+{
+    column_subs_static(chunk_size);
+    column_subs_dynamic(chunk_size);
+    column_subs_guided(chunk_size);
+    column_subs_auto(chunk_size);
+
+    std::cout << "Column chunk size: " << chunk_size << "\n\n";
+}
+
+void run_rows(int chunk_size)
+{
+    row_subs_static(chunk_size);
+    row_subs_dynamic(chunk_size);
+    row_subs_guided(chunk_size);
+    row_subs_auto(chunk_size);
+
+    std::cout << "Row chunk size: " << chunk_size << "\n\n";
 }
 
 int main(int argc, char *argv[])
 {
-
-    row_subs_static();
-    row_subs_dynamic();
-    row_subs_guided();
-    row_subs_auto();
-
-    column_subs_static();
-    column_subs_dynamic();
-    column_subs_guided();
-    column_subs_auto();
-
+    run_columns(0);
+    run_rows(0);
     return 0;
 }
