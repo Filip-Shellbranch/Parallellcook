@@ -61,6 +61,36 @@ void print_result(system_t result)
     }
 }
 
+void print_schedule()
+{
+    omp_sched_t my_sched;
+    int size;
+    const char *sched_name;
+
+    omp_get_schedule(&my_sched, &size);
+
+    switch (my_sched)
+    {
+    case omp_sched_static:
+        sched_name = "static";
+        break;
+    case omp_sched_dynamic:
+        sched_name = "dynamic";
+        break;
+    case omp_sched_guided:
+        sched_name = "guided";
+        break;
+    case omp_sched_auto:
+        sched_name = "auto";
+        break;
+    default:
+        sched_name = "Unknown";
+        break;
+    }
+
+    std::cout << "Chosen schedule: " << sched_name << "Size: " << size << "\n";
+}
+
 void set_schedule(omp_sched_t schedule, int chunk_size)
 {
     omp_set_schedule(schedule, chunk_size);
@@ -191,36 +221,6 @@ void column_subs_guided(int chunk_size)
 {
     set_schedule(omp_sched_guided, chunk_size);
     column_subs("guided");
-}
-
-void print_schedule()
-{
-    omp_sched_t my_sched;
-    int size;
-    const char *sched_name;
-
-    omp_get_schedule(&my_sched, &size);
-
-    switch (my_sched)
-    {
-    case omp_sched_static:
-        sched_name = "static";
-        break;
-    case omp_sched_dynamic:
-        sched_name = "dynamic";
-        break;
-    case omp_sched_guided:
-        sched_name = "guided";
-        break;
-    case omp_sched_auto:
-        sched_name = "auto";
-        break;
-    default:
-        sched_name = "Unknown";
-        break;
-    }
-
-    std::cout << "Chosen schedule: " << sched_name << "Size: " << size << "\n";
 }
 
 void column_subs_auto(int chunk_size)
