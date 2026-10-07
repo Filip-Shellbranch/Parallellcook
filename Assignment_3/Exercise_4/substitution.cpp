@@ -4,7 +4,14 @@
 #include <omp.h>
 #include <iostream>
 
-#define VARS 10000 // Ska testa med 42.000 vars 🤯🦧
+// Written by Filip Hellgren, David Olmedo
+// Compile by running:
+// "g++ -fopenmp Exercise_4/substitution.cpp -o a.out"
+
+// Run by typing:
+// "OMP_NUM_THREADS=<ThreadCount> ./a.out"
+
+#define VARS 42000
 
 typedef struct tri_system
 {

@@ -5,6 +5,11 @@
 #include <vector>
 
 // Written by Filip Hellgren, David Olmedo
+// Compile by running:
+// "g++ -fopenmp Exercise_3/matrix_two_outer_loop.cpp -o a.out"
+
+// Run by typing:
+// "OMP_NUM_THREADS=<ThreadCount> ./a.out"
 
 #define DIM 512
 

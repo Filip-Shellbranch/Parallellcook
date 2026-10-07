@@ -13,6 +13,10 @@
 		  or multiple time steps!
 
  Parallelised by Filip Hellgren, David Olmedo
+// Compile by running:
+// "g++ -fopenmp Exercise_2/Game_Of_Life_OpenMP.c -o a.out"
+// Run by typing:
+// "./a.out <ThreadCount> <ArraySize> <TimeSteps>"
  ******************************************************/
 
 #include <stdio.h>
