@@ -106,9 +106,14 @@ void row_subs(const char *schedule_name)
     for (int row = VARS - 1; row >= 0; row--)
     {
         x[row] = b[row];
-#pragma omp parallel for shared(A, x, row) schedule(runtime)
+        int sum = 0;
+#pragma omp parallel for shared(A, x, row) reduction(+ : sum) schedule(runtime)
         for (int col = row + 1; col < VARS; col++)
-            x[row] -= A[row][col] * x[col];
+        {
+            sum += A[row][col] * x[col];
+        }
+
+        x[row] -= sum;
         x[row] /= A[row][row];
     }
     auto end = std::chrono::steady_clock::now();
