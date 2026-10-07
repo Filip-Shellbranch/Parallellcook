@@ -145,6 +145,13 @@ void row_subs_auto(int chunk_size)
 {
     set_schedule(omp_sched_auto, chunk_size);
     row_subs("auto");
+
+    omp_sched_t my_sched;
+    int size;
+
+    omp_get_schedule(&my_sched, &size);
+
+    std::cout << "Chosen schedule: " << my_sched << "Size: " << size << "\n";
 }
 
 void column_subs(const char *schedule_name)
@@ -196,6 +203,13 @@ void column_subs_auto(int chunk_size)
 {
     set_schedule(omp_sched_auto, chunk_size);
     column_subs("auto");
+
+    omp_sched_t my_sched;
+    int size;
+
+    omp_get_schedule(&my_sched, &size);
+
+    std::cout << "Chosen schedule: " << my_sched << "Size: " << size << "\n";
 }
 
 void run_columns(int chunk_size)
