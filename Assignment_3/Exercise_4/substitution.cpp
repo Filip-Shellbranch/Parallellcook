@@ -136,7 +136,7 @@ void row_subs(const char *schedule_name)
     for (int row = VARS - 1; row >= 0; row--)
     {
         x[row] = b[row];
-        int sum = 0;
+        double sum = 0;
 #pragma omp parallel for shared(A, x, row) reduction(+ : sum) schedule(runtime)
         for (int col = row + 1; col < VARS; col++)
         {
