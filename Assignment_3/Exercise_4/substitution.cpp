@@ -4,7 +4,7 @@
 #include <omp.h>
 #include <iostream>
 
-#define VARS 15000 // Ska testa med 42.000 vars 🤯🦧
+#define VARS 10000 // Ska testa med 42.000 vars 🤯🦧
 
 typedef struct tri_system
 {
@@ -94,29 +94,61 @@ system_t generate_system()
     return sys;
 }
 
-void row_subs()
+void row_subs(const char *schedule_name)
 {
     system_t sys = generate_system();
+    std::cout << "System generated\n";
     auto &A = sys.A;
     auto &b = sys.b;
     auto &x = sys.x;
 
+    auto start = std::chrono::steady_clock::now();
     for (int row = VARS - 1; row >= 0; row--)
     {
         x[row] = b[row];
+#pragma omp parallel for schedule(runtime)
         for (int col = row + 1; col < VARS; col++)
             x[row] -= A[row][col] * x[col];
         x[row] /= A[row][row];
     }
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "Row substitution " << schedule_name << ":\n";
+    std::chrono::duration<double, std::milli> duration = end - start;
+    std::cout << "Thread count: " << omp_get_max_threads() << " System size: " << VARS << "\n";
+    std::cout << "Elapsed time: " << duration.count() << " ms\n\n";
+}
+
+void row_subs_static()
+{
+    set_schedule(omp_sched_static, 0);
+    row_subs("static");
+}
+
+void row_subs_dynamic()
+{
+    set_schedule(omp_sched_dynamic, 0);
+    row_subs("dynamic");
+}
+
+void row_subs_guided()
+{
+    set_schedule(omp_sched_guided, 0);
+    row_subs("guided");
+}
+
+void row_subs_auto()
+{
+    set_schedule(omp_sched_auto, 0);
+    row_subs("auto");
 }
 
 void column_subs(const char *schedule_name)
 {
     system_t sys = generate_system();
     std::cout << "System generated\n";
-    std::vector<std::vector<double>> &A = sys.A;
-    std::vector<double> &b = sys.b;
-    std::vector<double> &x = sys.x;
+    auto &A = sys.A;
+    auto &b = sys.b;
+    auto &x = sys.x;
 
     auto start = std::chrono::steady_clock::now();
     for (int row = 0; row < VARS; row++)
@@ -163,7 +195,11 @@ void column_subs_auto()
 
 int main(int argc, char *argv[])
 {
-    row_subs();
+
+    row_subs_static();
+    row_subs_dynamic();
+    row_subs_guided();
+    row_subs_auto();
 
     column_subs_static();
     column_subs_dynamic();
