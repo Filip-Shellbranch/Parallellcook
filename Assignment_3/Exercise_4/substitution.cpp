@@ -106,7 +106,7 @@ void row_subs(const char *schedule_name)
     for (int row = VARS - 1; row >= 0; row--)
     {
         x[row] = b[row];
-#pragma omp parallel for schedule(runtime)
+#pragma omp parallel for shared(A, x, row) schedule(runtime)
         for (int col = row + 1; col < VARS; col++)
             x[row] -= A[row][col] * x[col];
         x[row] /= A[row][row];
