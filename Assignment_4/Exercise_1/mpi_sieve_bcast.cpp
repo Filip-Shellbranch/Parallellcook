@@ -7,7 +7,7 @@
 #include <mpi.h>
 
 // Written by Filip Hellgren, David Olmedo
-#define MAX 100000
+#define MAX 100000000
 
 typedef std::vector<uint8_t> marks_t;
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
         {
             if (shared_marks[i - 1] == false)
             {
-                std::cout << "IS PRIME: " << i << "\n";
+                // std::cout << "IS PRIME: " << i << "\n";
                 count++;
             }
         }
