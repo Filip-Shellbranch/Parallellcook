@@ -7,7 +7,7 @@
 #include <mpi.h>
 
 // #define THREAD_COUNT 10
-#define MAX 10000000
+#define MAX 100000000
 
 typedef std::vector<uint8_t> marks_t;
 
