@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <mpi.h>
 
-// #define THREAD_COUNT 10
+// Written by Filip Hellgren, David Olmedo
 #define MAX 100000000
 
 typedef std::vector<uint8_t> marks_t;
