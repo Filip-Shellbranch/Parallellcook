@@ -126,6 +126,7 @@ int main(int argc, char *argv[])
     sieve_func(&info);
 
     // Collect results
+    auto collect_start = std::chrono::steady_clock::now();
     if (id == 0)
     {
         for (size_t i = 0; i < this_chunk_size; i++)
@@ -161,8 +162,9 @@ int main(int argc, char *argv[])
     {
         MPI_Send(local_marks.data(), this_chunk_size, MPI_UINT8_T, 0, 0, MPI_COMM_WORLD);
     }
-
+    auto collect_end = std::chrono::steady_clock::now();
     MPI_Finalize();
+
     auto end = std::chrono::steady_clock::now();
     int count = 0;
 
@@ -182,7 +184,9 @@ int main(int argc, char *argv[])
 
         // Calculate duration in milliseconds
         std::chrono::duration<double, std::milli> duration = end - start;
+        std::chrono::duration<double, std::milli> collection_duration = end - collect_start;
         std::cout << "Elapsed time: " << duration.count() << " ms\n";
+        std::cout << "Serial data collection time: " << collection_duration.count() << " ms\n";
     }
     return 0;
 }
