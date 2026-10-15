@@ -7,7 +7,7 @@
 #include <mpi.h>
 
 // Written by Filip Hellgren, David Olmedo
-#define MAX 100000000
+#define MAX 100000
 
 typedef std::vector<uint8_t> marks_t;
 
@@ -185,8 +185,9 @@ int main(int argc, char *argv[])
         // Calculate duration in milliseconds
         std::chrono::duration<double, std::milli> duration = end - start;
         std::chrono::duration<double, std::milli> collection_duration = end - collect_start;
-        std::cout << "Elapsed time: " << duration.count() << " ms\n";
+        std::cout << "Parallel compute time: " << duration.count() - collection_duration.count() << " ms\n";
         std::cout << "Serial data collection time: " << collection_duration.count() << " ms\n";
+        std::cout << "Elapsed time: " << duration.count() << " ms\n";
     }
     return 0;
 }
