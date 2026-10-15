@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     info.start = start_i + chunk_size * id;
     if (id + 1 != num_ranks)
     {
-        info.end = info.start + chunk_size;
+        info.end = info.start + chunk_size - 1;
     }
     else
     {

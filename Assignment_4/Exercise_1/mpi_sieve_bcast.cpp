@@ -108,22 +108,12 @@ int main(int argc, char *argv[])
     int work = end_i - start_i + 1;
     int chunk_size = work / num_ranks;
     int my_start = start_i + chunk_size * id;
-    int my_end;
-
-    if (id + 1 == num_ranks)
-    {
-        my_end = end_i;
-    }
-    else
-    {
-        my_end = my_start + chunk_size;
-    }
 
     p_info_t info;
     info.start = start_i + chunk_size * id;
     if (id + 1 != num_ranks)
     {
-        info.end = info.start + chunk_size;
+        info.end = info.start + chunk_size - 1;
     }
     else
     {
