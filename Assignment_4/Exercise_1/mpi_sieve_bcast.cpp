@@ -7,6 +7,11 @@
 #include <mpi.h>
 
 // Written by Filip Hellgren, David Olmedo
+// This MPI version of sieve.cpp is based on our POSIX version written together for Assignment 2
+// Compile by running:
+// "mpic++ Exercise_1/mpi_sieve_bcase.cpp -o sieve"
+// Run by typing:
+// "mpiexec hostfile=hosts ./sieve"
 #define MAX 100000000
 
 typedef std::vector<uint8_t> marks_t;
@@ -148,7 +153,7 @@ int main(int argc, char *argv[])
         {
             if (shared_marks[i - 1] == false)
             {
-                // std::cout << "IS PRIME: " << i << "\n";
+                std::cout << "IS PRIME: " << i << "\n";
                 count++;
             }
         }
