@@ -106,9 +106,8 @@ int main(int argc, char *argv[])
         local_marks[0] = true;
     }
 
-    MPI_Bcast(local_marks.data(), seq_end, MPI_UINT8_T, 0, MPI_COMM_WORLD);
-
     auto start = std::chrono::steady_clock::now();
+    MPI_Bcast(local_marks.data(), seq_end, MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
     int work = end_i - start_i + 1;
     int chunk_size = work / num_ranks;
